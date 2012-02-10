@@ -11,10 +11,28 @@
        ~@body
        (finally (.stop server#)))))
 
+(defn test-server [& [{:as options}]]
+  (let [handler (constantly (response "Hello World"))]
+    (serve handler (merge {:join? false} options))))
+
+(defn is-server-running-on-port [port] 
+  (let [resp (http/get (str "http://localhost:" port)
+                       {:conn-timeout 1000})]
+    (is (= (:status resp) 200))))
+
 (deftest serve-test
-  (with-env {"PORT" "4563"}
-    (let [handler (constantly (response "Hello World"))]
-      (with-server (serve handler {:join? false})
-        (let [resp (http/get "http://localhost:4563")]
-          (is (= (:status resp) 200))
-          (is (= (:body resp) "Hello World")))))))
+  (testing "default port"
+    (with-server (test-server)
+      (is-server-running-on-port 3000)))
+  (testing "fallback default ports"
+    (with-server (test-server)
+      (with-server (test-server)
+        (is-server-running-on-port 3000)
+        (is-server-running-on-port 3001))))
+  (testing "PORT environment variable"
+    (with-env {"PORT" "4563"}
+      (with-server (test-server) 
+        (is-server-running-on-port 4563))))
+  (testing ":port option"
+    (with-server (test-server {:port 5463})
+      (is-server-running-on-port 5463))))

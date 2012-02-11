@@ -43,4 +43,11 @@
   (testing ":init option"
     (let [ran-init? (atom false)]
       (with-server (test-server {:init #(reset! ran-init? true)})
-        (is @ran-init?)))))
+        (is @ran-init?))))
+
+  (testing ":destroy option"
+    (let [ran-destroy? (atom false)]
+      (with-server (test-server {:destroy #(reset! ran-destroy? true)})
+        (is (not @ran-destroy?)))
+      (Thread/sleep 100)
+      (is @ran-destroy?))))

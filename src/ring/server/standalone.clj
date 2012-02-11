@@ -10,7 +10,7 @@
   (if-not (sequential? port)
     (run-server port)
     (try (run-server (first port))
-         (catch Exception ex
+         (catch java.net.BindException ex
            (if-let [port (next port)]
              (try-port port run-server)
              (throw ex))))))

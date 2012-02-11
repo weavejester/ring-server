@@ -3,7 +3,10 @@
   (:use ring.adapter.jetty
         ring.server.options))
 
-(defn- try-port [port run-server]
+(defn- try-port
+  "Try running a server under one port or a list of ports. If a list of ports
+  is supplied, try each port until it succeeds or runs out of ports."
+  [port run-server]
   (if-not (sequential? port)
     (run-server port)
     (try (run-server (first port))
@@ -12,11 +15,14 @@
              (try-port port run-server)
              (throw ex))))))
 
-(defmacro ^:private in-thread [& body]
+(defmacro ^:private in-thread
+  "Execute the body in a new thread and return the Thread object."
+  [& body]
   `(doto (Thread. (fn [] ~@body))
      (.start)))
 
-(defn- run-server [server destroy]
+(defn- add-destroy-hook [server destroy]
+  "Add a destroy hook to be executed when the server ends."
   (in-thread
    (try (.join server)
         (finally (if destroy (destroy))))))
@@ -34,6 +40,6 @@
       (fn [port]
         (let [options (merge {:port port} options) 
               server  (run-jetty handler options)
-              thread  (run-server server destroy)]
+              thread  (add-destroy-hook server destroy)]
           (if join? (.join thread))
           server)))))

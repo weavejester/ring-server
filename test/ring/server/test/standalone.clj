@@ -13,7 +13,7 @@
 
 (defn test-server [& [{:as options}]]
   (let [handler (constantly (response "Hello World"))]
-    (serve handler (merge {:join? false} options))))
+    (serve handler (merge {:join? false, :open-browser? false} options))))
 
 (defn is-server-running-on-port [port] 
   (let [resp (http/get (str "http://localhost:" port)

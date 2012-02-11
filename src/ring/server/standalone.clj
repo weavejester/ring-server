@@ -1,7 +1,8 @@
 (ns ring.server.standalone
   "Functions to start a standalone Ring server."
   (:use ring.adapter.jetty
-        ring.server.options))
+        ring.server.options
+        [clojure.java.browse :only (browse-url)]))
 
 (defn- try-port
   "Try running a server under one port or a list of ports. If a list of ports
@@ -14,6 +15,25 @@
            (if-let [port (next port)]
              (try-port port run-server)
              (throw ex))))))
+
+(defn- server-port
+  "Get the port the server is listening on."
+  [server]
+  (-> (.getConnectors server)
+      (first)
+      (.getPort)))
+
+(defn- server-host
+  "Get the host the server is bound to."
+  [server]
+  (-> (.getConnectors server)
+      (first)
+      (.getHost)
+      (or "localhost")))
+
+(defn- open-browser-to [server]
+  (browse-url
+   (str "http://" (server-host server) ":" (server-port server))))
 
 (defmacro ^:private in-thread
   "Execute the body in a new thread and return the Thread object."
@@ -41,5 +61,9 @@
         (let [options (merge {:port port} options) 
               server  (run-jetty handler options)
               thread  (add-destroy-hook server destroy)]
-          (if join? (.join thread))
+          (println "Started server on port" (server-port server))
+          (if (open-browser? options)
+            (open-browser-to server))
+          (if join?
+            (.join thread))
           server)))))

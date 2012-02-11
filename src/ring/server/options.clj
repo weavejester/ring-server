@@ -10,3 +10,9 @@
   (or (:port options)
       (-?> (*env* "PORT") Integer.)
       (range 3000 3010)))
+
+(defn open-browser?
+  "True if a browser should be opened to view the web server. By default
+  a browser is opened unless the LEIN_NO_DEV environment variable is set."
+  [options]
+  (:open-browser? options (not (*env* "LEIN_NO_DEV"))))

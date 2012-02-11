@@ -7,8 +7,10 @@
   (if-not (sequential? port)
     (run-server port)
     (try (run-server (first port))
-         (catch Exception _
-           (try-port (next port) run-server)))))
+         (catch Exception ex
+           (if-let [port (next port)]
+             (try-port port run-server)
+             (throw ex))))))
 
 (defn serve
   "Start a web server to run a handler."

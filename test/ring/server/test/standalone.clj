@@ -24,15 +24,23 @@
   (testing "default port"
     (with-server (test-server)
       (is-server-running-on-port 3000)))
+
   (testing "fallback default ports"
     (with-server (test-server)
       (with-server (test-server)
         (is-server-running-on-port 3000)
         (is-server-running-on-port 3001))))
+
   (testing "PORT environment variable"
     (with-env {"PORT" "4563"}
       (with-server (test-server) 
         (is-server-running-on-port 4563))))
+
   (testing ":port option"
     (with-server (test-server {:port 5463})
-      (is-server-running-on-port 5463))))
+      (is-server-running-on-port 5463)))
+
+  (testing ":init option"
+    (let [ran-init? (atom false)]
+      (with-server (test-server {:init #(reset! ran-init? true)})
+        (is @ran-init?)))))

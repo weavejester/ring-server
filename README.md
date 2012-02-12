@@ -23,7 +23,7 @@ In production:
 
 Add the following dependency to your `project.clj` file:
 
-    [ring-server "0.1.0"]
+    [ring-server "0.1.1"]
 
 ## Usage 
 

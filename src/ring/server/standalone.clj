@@ -16,14 +16,14 @@
              (try-port port run-server)
              (throw ex))))))
 
-(defn- server-port
+(defn server-port
   "Get the port the server is listening on."
   [server]
   (-> (.getConnectors server)
       (first)
       (.getPort)))
 
-(defn- server-host
+(defn server-host
   "Get the host the server is bound to."
   [server]
   (-> (.getConnectors server)
@@ -35,7 +35,7 @@
   (browse-url
    (str "http://" (server-host server) ":" (server-port server))))
 
-(defmacro ^:private in-thread
+(defmacro ^{:private true} in-thread
   "Execute the body in a new thread and return the Thread object."
   [& body]
   `(doto (Thread. (fn [] ~@body))
@@ -54,7 +54,16 @@
    (middleware options)))
 
 (defn serve
-  "Start a web server to run a handler."
+  "Start a web server to run a handler. Takes the following options:
+    :port          - the port to run the server on
+    :join?         - if true, wait for the server to stop
+    :init          - a function to run before the server starts
+    :destroy       - a function to run after the server stops
+    :open-browser? - if true, open a web browser after the server starts
+    :middleware    - a list of middleware functions to apply to the handler
+
+  If join? is false, a Server object is returned."
+  {:arglists '([handler] [handler options])}
   [handler & [{:keys [init destroy join?] :as options}]]
   (let [options (assoc options :join? false)
         destroy (if destroy (memoize destroy))

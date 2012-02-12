@@ -1,34 +1,16 @@
-(ns ring.server.test.standalone
-  (:require [clj-http.client :as http])
+(ns ring.server.test.standalone 
   (:use clojure.test
         ring.server.standalone
+        ring.server.test.utils
         ring.util.environment
         ring.util.response))
 
-(defmacro with-server [server & body]
-  `(let [server# ~server]
-     (try
-       ~@body
-       (finally (.stop server#)))))
-
-(defn default-handler [req]
-  (response "Hello World"))
-
-(defn error-handler [req]
+(defn exception-handler [req]
   (throw (Exception. "testing")))
 
 (defn test-server [& [{:as options}]]
   (let [handler (:handler options default-handler)]
     (serve handler (merge {:join? false, :open-browser? false} options))))
-
-(defn http-get [port uri]
-  (http/get (str "http://localhost:" port uri)
-            {:conn-timeout 1000
-             :throw-exceptions false}))
-
-(defn is-server-running-on-port [port] 
-  (let [resp (http-get port "")]
-    (is (= (:status resp) 200))))
 
 (deftest serve-test
   (testing "default port"
@@ -63,6 +45,6 @@
       (is @ran-destroy?)))
 
   (testing "default middleware"
-    (with-server (test-server {:handler error-handler})
+    (with-server (test-server {:handler exception-handler})
       (let [body (:body (http-get 3000 ""))]
         (is (re-find #"java\.lang\.Exception: testing" body))))))

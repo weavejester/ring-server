@@ -11,13 +11,23 @@
        ~@body
        (finally (.stop server#)))))
 
+(defn default-handler [req]
+  (response "Hello World"))
+
+(defn error-handler [req]
+  (throw (Exception. "testing")))
+
 (defn test-server [& [{:as options}]]
-  (let [handler (constantly (response "Hello World"))]
+  (let [handler (:handler options default-handler)]
     (serve handler (merge {:join? false, :open-browser? false} options))))
 
+(defn http-get [port uri]
+  (http/get (str "http://localhost:" port uri)
+            {:conn-timeout 1000
+             :throw-exceptions false}))
+
 (defn is-server-running-on-port [port] 
-  (let [resp (http/get (str "http://localhost:" port)
-                       {:conn-timeout 1000})]
+  (let [resp (http-get port "")]
     (is (= (:status resp) 200))))
 
 (deftest serve-test
@@ -50,4 +60,9 @@
       (with-server (test-server {:destroy #(reset! ran-destroy? true)})
         (is (not @ran-destroy?)))
       (Thread/sleep 100)
-      (is @ran-destroy?))))
+      (is @ran-destroy?)))
+
+  (testing "default middleware"
+    (with-server (test-server {:handler error-handler})
+      (let [body (:body (http-get 3000 ""))]
+        (is (re-find #"java\.lang\.Exception: testing" body))))))

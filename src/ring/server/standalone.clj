@@ -47,11 +47,18 @@
    (try (.join server)
         (finally (if destroy (destroy))))))
 
+(defn- add-middleware [handler options]
+  (reduce
+   (fn [h m] (m h))
+   handler
+   (middleware options)))
+
 (defn serve
   "Start a web server to run a handler."
   [handler & [{:keys [init destroy join?] :as options}]]
   (let [options (assoc options :join? false)
-        destroy (if destroy (memoize destroy))]
+        destroy (if destroy (memoize destroy))
+        handler (add-middleware handler options)]
     (if init (init))
     (if destroy
       (. (Runtime/getRuntime)

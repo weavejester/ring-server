@@ -3,10 +3,12 @@
         ring.server.leiningen
         ring.server.test.utils))
 
-(def project-clj
-  `{:ring {:handler default-handler}})
+(def basic-project-clj
+  `{:ring {:handler default-handler
+           :adapter {:join? false}
+           :open-browser? false}})
 
 (deftest serve-test
   (testing "basic project.clj"
-    (with-server (serve project-clj)
+    (with-server (serve basic-project-clj)
       (is-server-running-on-port 3000))))

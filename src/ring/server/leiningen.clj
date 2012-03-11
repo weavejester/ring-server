@@ -3,12 +3,18 @@
   (:require [ring.server.standalone :as standalone]))
 
 (defn- load-var [sym]
-  (require (-> sym namespace symbol))
-  (find-var sym))
+  (when sym
+    (require (-> sym namespace symbol))
+    (find-var sym)))
 
 (defn serve
   "Start a server from a Leiningen project map."
   [project]
   (standalone/serve
    (load-var (-> project :ring :handler))
-   {:join? false, :open-browser? false}))
+   (merge
+    {:join? true}
+    (:ring project)
+    (-> project :ring :adapter)
+    {:init    (load-var (-> project :ring :init))
+     :destroy (load-var (-> project :ring :destroy))})))

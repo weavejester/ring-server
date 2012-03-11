@@ -3,5 +3,5 @@
   :dependencies [[org.clojure/clojure "1.2.1"]
                  [org.clojure/core.incubator "0.1.0"]
                  [ring "1.0.2"]]
-  :dev-dependencies [[clj-http "0.3.1"]
-                     [codox "0.4.0"]])
+  :profiles {:dev {:dependencies [[clj-http "0.3.1"]
+                                  [codox "0.4.0"]]}})

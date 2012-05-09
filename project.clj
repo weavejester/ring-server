@@ -4,4 +4,4 @@
                  [org.clojure/core.incubator "0.1.0"]
                  [ring "1.0.2"]]
   :plugins [[codox "0.6.1"]]
-  :profiles {:dev {:dependencies [[clj-http "0.3.1"]]}})
+  :profiles {:dev {:dependencies [[clj-http "0.4.1"]]}})

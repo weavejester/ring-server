@@ -4,6 +4,7 @@
         ring.server.options
         ring.middleware.stacktrace
         ring.middleware.reload
+        ring.middleware.refresh
         [clojure.java.browse :only (browse-url)]))
 
 (defn- try-port
@@ -59,8 +60,14 @@
     (wrap-reload handler)
     handler))
 
+(defn- add-auto-refresh [handler options]
+  (if (:auto-refresh? options)
+    (wrap-refresh handler)
+    handler))
+
 (defn- add-middleware [handler options]
   (-> handler
+      (add-auto-refresh options)
       (add-stacktraces options)
       (add-auto-reload options)))
 
@@ -73,6 +80,7 @@
     :open-browser? - if true, open a web browser after the server starts
     :stacktraces?  - if true, display stacktraces when an exception is thrown
     :auto-reload?  - if true, automatically reload source files
+    :auto-refresh? - if true, automatically refresh browser when source changes
 
   If join? is false, a Server object is returned."
   {:arglists '([handler] [handler options])}

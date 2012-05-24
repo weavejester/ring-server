@@ -1,8 +1,6 @@
 (ns ring.server.options
   "Functions to retrieve options and settings with sensible defaults"
   (:use ring.util.environment
-        ring.middleware.stacktrace
-        ring.middleware.reload
         [clojure.core.incubator :only (-?>)]))
 
 (def dev-env?
@@ -22,8 +20,12 @@
   [options]
   (:open-browser? options dev-env?))
 
-(defn middleware
+(defn auto-reload?
+  "True if the source files should be automatically reloaded."
   [options]
-  (or (:middleware options)
-      (if dev-env?
-        [wrap-stacktrace wrap-reload])))
+  (:auto-reload? options dev-env?))
+
+(defn stacktraces?
+  "True if stacktraces should be shown for exceptions raised by the handler."
+  [options]
+  (:stacktraces? options dev-env?))

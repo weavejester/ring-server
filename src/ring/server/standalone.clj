@@ -2,6 +2,8 @@
   "Functions to start a standalone Ring server."
   (:use ring.adapter.jetty
         ring.server.options
+        ring.middleware.stacktrace
+        ring.middleware.reload
         [clojure.java.browse :only (browse-url)]))
 
 (defn- try-port
@@ -47,11 +49,20 @@
    (try (.join server)
         (finally (if destroy (destroy))))))
 
+(defn- add-stacktraces [handler options]
+  (if (stacktraces? options)
+    (wrap-stacktrace handler)
+    handler))
+
+(defn- add-auto-reload [handler options]
+  (if (auto-reload? options)
+    (wrap-reload handler)
+    handler))
+
 (defn- add-middleware [handler options]
-  (reduce
-   (fn [h m] (m h))
-   handler
-   (middleware options)))
+  (-> handler
+      (add-stacktraces options)
+      (add-auto-reload options)))
 
 (defn serve
   "Start a web server to run a handler. Takes the following options:
@@ -60,7 +71,8 @@
     :init          - a function to run before the server starts
     :destroy       - a function to run after the server stops
     :open-browser? - if true, open a web browser after the server starts
-    :middleware    - a list of middleware functions to apply to the handler
+    :stacktraces?  - if true, display stacktraces when an exception is thrown
+    :auto-reload?  - if true, automatically reload source files
 
   If join? is false, a Server object is returned."
   {:arglists '([handler] [handler options])}

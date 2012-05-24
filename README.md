@@ -54,9 +54,19 @@ The following options are supported:
   True if you want a browser to be opened to the server. Defaults to
   true in development mode, false in production mode.
 
-* `:middleware` -
-  A list of middleware functions to apply to the handler. Defaults to
-  `[wrap-stacktrace wrap-reload]` in development.
+* `:stacktrace?` -
+  True if you want a stacktrace to be displayed in the browser when
+  an exception is raised. Default to true in development, false in
+  production.
+
+* `:auto-reload?` -
+  True if you want your source files to be automatically reloaded
+  when they are modified. Defaults to true in development, false in
+  production.
+
+* `:auto-refresh?` -
+  True if you want your browser to automatically refresh when source
+  files are changed. Defaults to false.
 
 ## License
 

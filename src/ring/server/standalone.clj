@@ -4,8 +4,7 @@
         ring.server.options
         ring.middleware.stacktrace
         ring.middleware.reload
-        ring.middleware.refresh
-        [clojure.java.browse :only (browse-url)]))
+        ring.middleware.refresh))
 
 (defn- try-port
   "Try running a server under one port or a list of ports. If a list of ports
@@ -35,7 +34,8 @@
       (or "localhost")))
 
 (defn- open-browser-to [server]
-  (browse-url
+  (require 'clojure.java.browse)
+  ((resolve 'clojure.java.browse/browse-url)
    (str "http://" (server-host server) ":" (server-port server))))
 
 (defmacro ^{:private true} in-thread

@@ -68,8 +68,8 @@
 (defn- add-middleware [handler options]
   (-> handler
       (add-auto-refresh options)
-      (add-stacktraces options)
-      (add-auto-reload options)))
+      (add-auto-reload options)
+      (add-stacktraces options)))
 
 (defn serve
   "Start a web server to run a handler. Takes the following options:

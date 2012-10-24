@@ -5,6 +5,7 @@
         ring.middleware.stacktrace
         ring.middleware.reload
         ring.middleware.refresh
+        ring.middleware.context
         [clojure.java.browse :only (browse-url)]))
 
 (defn- try-port
@@ -65,11 +66,17 @@
     (wrap-refresh handler)
     handler))
 
+(defn- add-context [handler options]
+  (if (:context-handler options)
+    (wrap-context handler)
+    handler))
+
 (defn- add-middleware [handler options]
   (-> handler
       (add-auto-refresh options)
       (add-auto-reload options)
-      (add-stacktraces options)))
+      (add-stacktraces options)
+      (add-context options)))
 
 (defn serve
   "Start a web server to run a handler. Takes the following options:

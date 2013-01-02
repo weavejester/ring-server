@@ -57,7 +57,7 @@
 
 (defn- add-auto-reload [handler options]
   (if (auto-reload? options)
-    (wrap-reload handler)
+    (wrap-reload handler {:dirs (:reload-paths options)})
     handler))
 
 (defn- add-auto-refresh [handler options]
@@ -80,6 +80,7 @@
     :open-browser? - if true, open a web browser after the server starts
     :stacktraces?  - if true, display stacktraces when an exception is thrown
     :auto-reload?  - if true, automatically reload source files
+    :reload-paths  - seq of src-paths to reload on change - defaults to [\"src\"]    
     :auto-refresh? - if true, automatically refresh browser when source changes
 
   If join? is false, a Server object is returned."

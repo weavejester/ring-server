@@ -54,6 +54,11 @@ The following options are supported:
   True if you want a browser to be opened to the server. Defaults to
   true in development mode, false in production mode.
 
+* `:browser-uri` -
+  A path to append to the target URL if opening a browser (default 
+  none). The full URI will be constructed like:
+  `http://{host}:{port}{browser-uri}`
+
 * `:stacktrace?` -
   True if you want a stacktrace to be displayed in the browser when
   an exception is raised. Default to true in development, false in

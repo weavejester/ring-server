@@ -1,7 +1,8 @@
 (ns ring.server.options
   "Functions to retrieve options and settings with sensible defaults"
   (:use ring.util.environment
-        [clojure.core.incubator :only (-?>)]))
+        [clojure.core.incubator :only (-?>)])
+  (:require [clojure.string :as str]))
 
 (def dev-env?
   (not (*env* "LEIN_NO_DEV")))
@@ -19,6 +20,12 @@
   a browser is opened unless the LEIN_NO_DEV environment variable is set."
   [options]
   (:open-browser? options dev-env?))
+
+(defn browser-uri
+  "The path to browse to when opening a browser"
+  [options]
+  (-> (str "/" (:browser-uri options))
+      (str/replace #"^/+" "/")))
 
 (defn auto-reload?
   "True if the source files should be automatically reloaded."

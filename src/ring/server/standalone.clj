@@ -34,9 +34,9 @@
       (.getHost)
       (or "localhost")))
 
-(defn- open-browser-to [server]
+(defn- open-browser-to [server options]
   (browse-url
-   (str "http://" (server-host server) ":" (server-port server))))
+   (str "http://" (server-host server) ":" (server-port server) (browser-uri options))))
 
 (defmacro ^{:private true} in-thread
   "Execute the body in a new thread and return the Thread object."
@@ -78,6 +78,7 @@
     :init          - a function to run before the server starts
     :destroy       - a function to run after the server stops
     :open-browser? - if true, open a web browser after the server starts
+    :browser-uri   - the path to browse to when opening a browser
     :stacktraces?  - if true, display stacktraces when an exception is thrown
     :auto-reload?  - if true, automatically reload source files
     :auto-refresh? - if true, automatically refresh browser when source changes
@@ -94,12 +95,12 @@
          (addShutdownHook (Thread. destroy))))
     (try-port (port options)
       (fn [port]
-        (let [options (merge {:port port} options) 
+        (let [options (merge {:port port} options)
               server  (run-jetty handler options)
               thread  (add-destroy-hook server destroy)]
           (println "Started server on port" (server-port server))
           (if (open-browser? options)
-            (open-browser-to server))
+            (open-browser-to server options))
           (if join?
             (.join thread))
           server)))))

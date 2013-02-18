@@ -57,7 +57,7 @@
 
 (defn- add-auto-reload [handler options]
   (if (auto-reload? options)
-    (wrap-reload handler {:dirs (:reload-paths options)})
+    (wrap-reload handler {:dirs (reload-paths options)})
     handler))
 
 (defn- add-auto-refresh [handler options]

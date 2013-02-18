@@ -36,3 +36,7 @@
   "True if stacktraces should be shown for exceptions raised by the handler."
   [options]
   (:stacktraces? options dev-env?))
+
+(defn reload-paths 
+  [options]
+  (:reload-paths options ["src"]))

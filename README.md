@@ -68,6 +68,10 @@ The following options are supported:
   True if you want your source files to be automatically reloaded
   when they are modified. Defaults to true in development, false in
   production.
+  
+* `:reload-paths` -
+  A seq of source paths to reload. Defaults to [\"src\"]. 
+  Only relevant if :auto-reload? is true.
 
 * `:auto-refresh?` -
   True if you want your browser to automatically refresh when source

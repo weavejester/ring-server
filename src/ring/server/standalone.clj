@@ -65,7 +65,7 @@
     (wrap-refresh handler)
     handler))
 
-(defn- add-middleware [handler options]
+(defn add-middleware [handler options]
   (-> handler
       (add-auto-refresh options)
       (add-auto-reload options)

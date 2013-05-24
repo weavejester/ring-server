@@ -59,7 +59,7 @@ The following options are supported:
   none). The full URI will be constructed like:
   `http://{host}:{port}{browser-uri}`
 
-* `:stacktrace?` -
+* `:stacktraces?` -
   True if you want a stacktrace to be displayed in the browser when
   an exception is raised. Default to true in development, false in
   production.

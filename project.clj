@@ -1,4 +1,4 @@
-(defproject ring-server "0.2.8"
+(defproject ring-server "0.3.0"
   :description "Library for running Ring web servers"
   :url "https://github.com/weavejester/ring-server"
   :license {:name "Eclipse Public License"

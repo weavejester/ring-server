@@ -47,4 +47,5 @@
   (testing "default middleware"
     (with-server (test-server {:handler exception-handler})
       (let [body (:body (http-get 3000 ""))]
-        (is (re-find #"java\.lang\.Exception: testing" body))))))
+        (is (re-find #"java\.lang\.Exception" body))
+        (is (re-find #"testing" body))))))

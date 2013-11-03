@@ -7,5 +7,5 @@
                  [org.clojure/core.incubator "0.1.0"]
                  [ring "1.2.1"]
                  [ring-refresh "0.1.2"]]
-  :plugins [[codox "0.6.1"]]
+  :plugins [[codox "0.6.6"]]
   :profiles {:dev {:dependencies [[clj-http "0.4.1"]]}})

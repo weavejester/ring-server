@@ -3,7 +3,7 @@
 A library for starting a web server to serve a [Ring][1] handler with
 sensible default options and environment variable overrides.
 
-[1]: https://github.com/mmcgrana/ring
+[1]: https://github.com/ring-clojure/ring
 
 ## Features
 

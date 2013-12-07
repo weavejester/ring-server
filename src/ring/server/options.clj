@@ -38,5 +38,11 @@
   (:stacktraces? options dev-env?))
 
 (defn reload-paths 
+  "Specify the paths for source code that should get reloaded."
   [options]
   (:reload-paths options ["src"]))
+
+(defn refresh-paths 
+  "Specify the paths that should trigger browser refreshes."
+  [options]
+  (:refresh-paths options ["src" "resources"]))

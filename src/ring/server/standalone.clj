@@ -52,7 +52,8 @@
 
 (defn- add-stacktraces [handler options]
   (if (stacktraces? options)
-    (wrap-stacktrace handler)
+    ((or (:stacktrace-middleware options)
+         wrap-stacktrace) handler)
     handler))
 
 (defn- add-auto-reload [handler options]
@@ -73,16 +74,17 @@
 
 (defn serve
   "Start a web server to run a handler. Takes the following options:
-    :port          - the port to run the server on
-    :join?         - if true, wait for the server to stop
-    :init          - a function to run before the server starts
-    :destroy       - a function to run after the server stops
-    :open-browser? - if true, open a web browser after the server starts
-    :browser-uri   - the path to browse to when opening a browser
-    :stacktraces?  - if true, display stacktraces when an exception is thrown
-    :auto-reload?  - if true, automatically reload source files
-    :reload-paths  - seq of src-paths to reload on change - defaults to [\"src\"]    
-    :auto-refresh? - if true, automatically refresh browser when source changes
+    :port                  - the port to run the server on
+    :join?                 - if true, wait for the server to stop
+    :init                  - a function to run before the server starts
+    :destroy               - a function to run after the server stops
+    :open-browser?         - if true, open a web browser after the server starts
+    :browser-uri           - the path to browse to when opening a browser
+    :stacktraces?          - if true, display stacktraces when an exception is thrown
+    :stacktrace-middleware - a middleware that handles stacktraces
+    :auto-reload?          - if true, automatically reload source files
+    :reload-paths          - seq of src-paths to reload on change - defaults to [\"src\"]
+    :auto-refresh?         - if true, automatically refresh browser when source changes
 
   If join? is false, a Server object is returned."
   {:arglists '([handler] [handler options])}

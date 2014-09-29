@@ -17,4 +17,5 @@
     (:ring project)
     (-> project :ring :adapter)
     {:init    (load-var (-> project :ring :init))
-     :destroy (load-var (-> project :ring :destroy))})))
+     :destroy (load-var (-> project :ring :destroy))
+     :stacktrace-middleware (load-var (-> project :ring :stacktrace-middleware))})))

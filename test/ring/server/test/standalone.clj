@@ -1,4 +1,4 @@
-(ns ring.server.test.standalone 
+(ns ring.server.test.standalone
   (:use clojure.test
         ring.server.standalone
         ring.server.test.utils
@@ -25,7 +25,7 @@
 
   (testing "PORT environment variable"
     (with-env {"PORT" "4563"}
-      (with-server (test-server) 
+      (with-server (test-server)
         (is-server-running-on-port 4563))))
 
   (testing ":port option"
@@ -48,4 +48,15 @@
     (with-server (test-server {:handler exception-handler})
       (let [body (:body (http-get 3000 ""))]
         (is (re-find #"java\.lang\.Exception" body))
-        (is (re-find #"testing" body))))))
+        (is (re-find #"testing" body)))))
+
+  (testing "custom stacktrace middleware"
+    (let [middleware (fn [handler]
+                       (fn [req]
+                         (try (handler req)
+                              (catch Exception e
+                                  {:body "Hello"}))))]
+      (with-server (test-server {:handler exception-handler
+                                 :stacktrace-middleware middleware})
+        (is (= (:body (http-get 3000 ""))
+               "Hello"))))))

@@ -64,6 +64,10 @@ The following options are supported:
   an exception is raised. Default to true in development, false in
   production.
 
+* `:stacktrace-middleware` -
+  Override the default Ring stacktrace middleware with a custom
+  middleware function.
+
 * `:auto-reload?` -
   True if you want your source files to be automatically reloaded
   when they are modified. Defaults to true in development, false in

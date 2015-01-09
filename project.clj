@@ -3,9 +3,9 @@
   :url "https://github.com/weavejester/ring-server"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.2.1"]
+  :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.clojure/core.incubator "0.1.0"]
-                 [ring "1.2.1"]
+                 [ring "1.3.2"]
                  [ring-refresh "0.1.2"]]
-  :plugins [[codox "0.6.6"]]
+  :plugins [[codox "0.8.10"]]
   :profiles {:dev {:dependencies [[clj-http "0.4.1"]]}})

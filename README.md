@@ -79,6 +79,6 @@ The following options are supported:
 
 ## License
 
-Copyright © 2013 James Reeves
+Copyright © 2015 James Reeves
 
 Distributed under the Eclipse Public License, the same as Clojure.

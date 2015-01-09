@@ -1,7 +1,6 @@
 (ns ring.server.options
   "Functions to retrieve options and settings with sensible defaults"
-  (:use ring.util.environment
-        [clojure.core.incubator :only (-?>)])
+  (:use ring.util.environment)
   (:require [clojure.string :as str]))
 
 (def dev-env?
@@ -12,7 +11,7 @@
   Defaults to a range of ports from 3000 to 3010."
   [options]
   (or (:port options)
-      (-?> (*env* "PORT") Integer.)
+      (if-let [port (*env* "PORT")] (Integer. port))
       (range 3000 3010)))
 
 (defn open-browser?

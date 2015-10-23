@@ -7,11 +7,17 @@
     (require (-> sym namespace symbol))
     (find-var sym)))
 
+(defn get-handler [project]
+  (let [handler-sym (-> project :ring :handler)]
+    (if (-> project :ring :re-resolve)
+      (fn [r] ((load-var handler-sym) r))
+      (load-var handler-sym))))
+
 (defn serve
   "Start a server from a Leiningen project map."
   [project]
   (standalone/serve
-   (load-var (-> project :ring :handler))
+   (get-handler project)
    (merge
     {:join? true}
     (:ring project)

@@ -81,6 +81,10 @@ The following options are supported:
   True if you want your browser to automatically refresh when source
   files are changed. Defaults to false.
 
+* `:refresh-paths` -
+  A seq of source paths to refresh. Defaults to [\"src\" \"resources\"].
+  Only relevant if :auto-refresh? is true.
+
 ## License
 
 Copyright © 2015 James Reeves

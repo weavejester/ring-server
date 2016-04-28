@@ -36,6 +36,10 @@
   [options]
   (:stacktraces? options dev-env?))
 
-(defn reload-paths 
+(defn reload-paths
   [options]
   (:reload-paths options ["src"]))
+
+(defn refresh-paths
+  [options]
+  (:refresh-paths options ["src" "resources"]))

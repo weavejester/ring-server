@@ -63,7 +63,7 @@
 
 (defn- add-auto-refresh [handler options]
   (if (:auto-refresh? options)
-    (wrap-refresh handler)
+    (wrap-refresh handler (refresh-paths options))
     handler))
 
 (defn- add-middleware [handler options]
@@ -85,6 +85,7 @@
     :auto-reload?          - if true, automatically reload source files
     :reload-paths          - seq of src-paths to reload on change - defaults to [\"src\"]
     :auto-refresh?         - if true, automatically refresh browser when source changes
+    :refresh-paths         - seq of src-paths to refresh browser on change - defaults to [\"src\" \"resources\"]
 
   If join? is false, a Server object is returned."
   {:arglists '([handler] [handler options])}

@@ -10,8 +10,8 @@
   "Find the port or list of ports specified in the options or environment.
   Defaults to a range of ports from 3000 to 3010."
   [options]
-  (or (:port options)
-      (if-let [port (*env* "PORT")] (Integer. port))
+  (or (if-let [port (*env* "PORT")] (Integer. port))
+      (:port options)
       (range 3000 3010)))
 
 (defn open-browser?

@@ -35,8 +35,9 @@
       (or "localhost")))
 
 (defn- open-browser-to [server options]
-  (browse-url
-   (str "http://" (server-host server) ":" (server-port server) (browser-uri options))))
+  (future
+    (browse-url
+     (str "http://" (server-host server) ":" (server-port server) (browser-uri options)))))
 
 (defmacro ^{:private true} in-thread
   "Execute the body in a new thread and return the Thread object."

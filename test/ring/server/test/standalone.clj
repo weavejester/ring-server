@@ -32,6 +32,18 @@
     (with-server (test-server {:port 5463})
       (is-server-running-on-port 5463)))
 
+  (testing ":port options"
+    (with-server (test-server {:port [3564 3565]})
+      (is-server-running-on-port 3564)
+      (is-server-not-running-on-port 3565)))
+
+  (testing "fallback :port options"
+    (let [opts {:port (range 4000 4010)}]
+      (with-server (test-server opts)
+        (with-server (test-server opts)
+          (is-server-running-on-port 4000)
+          (is-server-running-on-port 4001)))))
+
   (testing ":init option"
     (let [ran-init? (atom false)]
       (with-server (test-server {:init #(reset! ran-init? true)})

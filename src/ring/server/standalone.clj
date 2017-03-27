@@ -99,7 +99,7 @@
          (addShutdownHook (Thread. destroy))))
     (try-port (port options)
       (fn [port]
-        (let [options (merge {:port port} options)
+        (let [options (assoc options :port port)
               server  (run-jetty handler options)
               thread  (add-destroy-hook server destroy)]
           (println "Started server on port" (server-port server))

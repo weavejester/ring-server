@@ -21,7 +21,9 @@
    (merge
     {:join? true}
     (:ring project)
-    (-> project :ring :adapter)
+    (merge
+     (-> project :ring :adapter)
+     {:configurator (load-var (-> project :ring :adapter :configurator))})
     {:init    (load-var (-> project :ring :init))
      :destroy (load-var (-> project :ring :destroy))
      :stacktrace-middleware (load-var (-> project :ring :stacktrace-middleware))})))
